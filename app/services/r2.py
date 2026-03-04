@@ -1,0 +1,91 @@
+"""R2 storage service for managing version files."""
+
+from typing import Optional
+
+import boto3
+from botocore.exceptions import ClientError
+
+from app.core.config import settings
+from app.schemas.version import VersionDetail, FileInfo
+
+
+class R2Service:
+    """Service for interacting with Cloudflare R2 storage."""
+
+    def __init__(self):
+        """Initialize R2 service with application settings."""
+        self.endpoint = settings.r2_endpoint
+        self.access_key = settings.r2_access_key_id
+        self.secret_key = settings.r2_secret_access_key
+        self.bucket = settings.r2_bucket_name
+        self.base_url = settings.r2_base_url
+
+        self.s3_client = boto3.client(
+            "s3",
+            endpoint_url=self.endpoint,
+            aws_access_key_id=self.access_key,
+            aws_secret_access_key=self.secret_key,
+        )
+
+    def list_versions(self) -> list[str]:
+        """List all available versions.
+
+        Returns:
+            List of version strings sorted in descending order.
+        """
+        try:
+            paginator = self.s3_client.get_paginator("list_objects_v2")
+            result = paginator.paginate(Bucket=self.bucket, Delimiter="/")
+
+            versions = []
+            for prefix in result.search("CommonPrefixes"):
+                if prefix:
+                    version = prefix.get("Prefix", "").rstrip("/")
+                    if version:
+                        versions.append(version)
+
+            return sorted(versions, reverse=True)
+
+        except ClientError as e:
+            raise RuntimeError(f"Failed to list versions: {e}")
+
+    def get_version_detail(self, version: str) -> Optional[VersionDetail]:
+        """Get detailed information about a specific version.
+
+        Args:
+            version: Version string (e.g., "0.2.1")
+
+        Returns:
+            VersionDetail object with file list, or None if not found.
+        """
+        try:
+            prefix = f"{version}/"
+            response = self.s3_client.list_objects_v2(
+                Bucket=self.bucket,
+                Prefix=prefix,
+            )
+
+            if "Contents" not in response:
+                return None
+
+            files = []
+            for obj in response["Contents"]:
+                file_name = obj["Key"].replace(prefix, "")
+                if file_name:
+                    files.append(FileInfo(
+                        name=file_name,
+                        size=obj["Size"],
+                        download_url=f"{self.base_url}/{obj['Key']}"
+                    ))
+
+            return VersionDetail(
+                version=version,
+                files=files
+            )
+
+        except ClientError as e:
+            raise RuntimeError(f"Failed to get version detail: {e}")
+
+
+# Create global service instance
+r2_service = R2Service()
