@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     @property
     def frontend_build_dir(self) -> Path:
         """Get frontend build directory path."""
-        project_root = Path(__file__).parent.parent.parent
+        project_root = Path(__file__).parent.parent.parent.parent
         return project_root / "frontend" / "build"
 
 

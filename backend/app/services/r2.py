@@ -3,6 +3,7 @@
 from typing import Optional
 
 import boto3
+import os
 from botocore.exceptions import ClientError
 
 from app.core.config import settings
@@ -14,12 +15,11 @@ class R2Service:
 
     def __init__(self):
         """Initialize R2 service with application settings."""
-        self.endpoint = settings.r2_endpoint
-        self.access_key = settings.r2_access_key_id
-        self.secret_key = settings.r2_secret_access_key
-        self.bucket = settings.r2_bucket_name
-        self.base_url = settings.r2_base_url
-
+        self.endpoint = os.getenv("R2_ENDPOINT")
+        self.access_key = os.getenv("R2_AK")
+        self.secret_key = os.getenv("R2_SK")
+        self.bucket = os.getenv("R2_BUCKET") #settings.r2_bucket_name
+        self.base_url = os.getenv("R2_BASE_URL")
         self.s3_client = boto3.client(
             "s3",
             endpoint_url=self.endpoint,
