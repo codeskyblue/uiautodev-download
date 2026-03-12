@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from app.schemas.version import VersionsList, VersionDetail
 from app.services.r2 import r2_service
 
-router = APIRouter(prefix="/api/versions", tags=["versions"])
+router = APIRouter()
 
 
 @router.get("", response_model=VersionsList)

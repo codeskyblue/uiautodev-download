@@ -8,6 +8,11 @@
         "@sveltejs/mcp"
       ],
       "env": {}
+    },
+    "shadcn-svelte": {
+      "command": "bunx",
+      "args": ["@binsarjr/shadcn-svelte-mcp"],
+      "env": {}
     }
   }
 }

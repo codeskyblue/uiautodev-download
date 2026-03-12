@@ -3,6 +3,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -25,10 +26,10 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    r2_endpoint: str
-    r2_access_key_id: str
-    r2_secret_access_key: str
-    r2_bucket_name: str
+    r2_endpoint: str = ""
+    r2_access_key_id: str = Field(default="", alias="R2_AK")
+    r2_secret_access_key: str = Field(default="", alias="R2_SK")
+    r2_bucket_name: str = Field(default="uiautodev", alias="R2_BUCKET")
     r2_base_url: str = "https://dl.uiauto.dev"
 
     @property

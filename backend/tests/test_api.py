@@ -16,7 +16,7 @@ def client():
 @pytest.fixture
 def mock_r2_service():
     """Mock R2 service."""
-    with patch("app.routers.versions.r2_service") as mock:
+    with patch("app.routers.api.versions.r2_service") as mock:
         yield mock
 
 

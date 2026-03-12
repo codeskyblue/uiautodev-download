@@ -7,7 +7,7 @@ from fastapi import APIRouter
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.core.config import settings
+from app.config import settings
 
 
 def create_spa_router(frontend_build_dir: Optional[Path] = None) -> APIRouter:

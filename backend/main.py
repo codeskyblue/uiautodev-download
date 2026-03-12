@@ -6,9 +6,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import versions
-from app.routers.spa import setup_spa_static_files
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -35,11 +32,8 @@ app.add_middleware(
 )
 
 # Register routers
-app.include_router(versions.router)
-
-# Setup SPA static file serving and register SPA router
-spa_router = setup_spa_static_files(app)
-app.include_router(spa_router)
+from app.routers import router
+app.include_router(router)
 
 
 @app.get("/health")
@@ -50,7 +44,9 @@ async def health():
 
 if __name__ == "__main__":
     import uvicorn
+    from app.config import settings
 
+    print(settings.model_dump_json(indent=2))
     port = int(os.getenv("PORT", 7001))
     uvicorn.run(
         "main:app",
