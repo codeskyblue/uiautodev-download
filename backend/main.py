@@ -49,7 +49,8 @@ app.add_middleware(
 )
 
 # Register routers
-from app.routers import router
+from app.routers import router, setup
+setup(app)
 app.include_router(router)
 
 

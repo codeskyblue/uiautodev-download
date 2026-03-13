@@ -9,7 +9,6 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 
-
 def create_spa_router(frontend_build_dir: Optional[Path] = None) -> APIRouter:
     """Create SPA router with optional custom build directory.
 
