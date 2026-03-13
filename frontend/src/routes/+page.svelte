@@ -137,7 +137,7 @@
 
 	<footer class="border-t mt-16">
 		<div class="container mx-auto px-4 py-6 text-center text-sm text-muted-foreground">
-			<p>© 2024 UIAuto.dev. All rights reserved.</p>
+			<p>© 2026 UIAuto.dev. All rights reserved.</p>
 		</div>
 	</footer>
 </div>

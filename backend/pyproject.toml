@@ -12,6 +12,7 @@ dependencies = [
     "pydantic-settings>=2.0.0",
     "python-dotenv>=1.0.0",
     "moto[all,ec2,s3]>=5.1.21",
+    "cashews>=7.5.0",
 ]
 
 [dependency-groups]

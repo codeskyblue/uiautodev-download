@@ -14,7 +14,7 @@ async def list_versions() -> VersionsList:
 
     Returns versions sorted in descending order (newest first).
     """
-    versions = r2_service.list_versions()
+    versions = await r2_service.list_versions()
     return VersionsList(versions=versions)
 
 
@@ -31,7 +31,7 @@ async def get_version_detail(version: str) -> VersionDetail:
     Raises:
         HTTPException: If version is not found
     """
-    detail = r2_service.get_version_detail(version)
+    detail = await r2_service.get_version_detail(version)
     if detail is None:
         raise HTTPException(status_code=404, detail="Version not found")
     return detail

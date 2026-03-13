@@ -1,18 +1,35 @@
 """Main FastAPI application."""
 
+import asyncio
 import os
 from contextlib import asynccontextmanager
 
+from cashews import cache
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.config import settings
+from app.services.r2 import r2_service
+
+
+# Configure cache (in-memory backend)
+cache.setup("mem://")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
-    # Startup
+    # Startup - warm up cache in background
+    async def warm_cache():
+        try:
+            await r2_service.list_versions()
+        except Exception:
+            pass
+
+    asyncio.create_task(warm_cache())
     yield
     # Shutdown
+    await cache.clear()
 
 
 app = FastAPI(
