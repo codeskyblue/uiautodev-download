@@ -24,7 +24,9 @@ def create_spa_router(frontend_build_dir: Optional[Path] = None) -> APIRouter:
     spa_router = APIRouter()
 
     @spa_router.get("/")
-    async def root():
+    @spa_router.get("/history")
+    @spa_router.get("/{version}")
+    async def root(version = None):
         """Serve SPA index.html."""
         index_file = frontend_build_dir / "index.html"
         if index_file.exists():
