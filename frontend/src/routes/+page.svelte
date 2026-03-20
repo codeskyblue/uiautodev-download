@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
+	import { Card, CardContent } from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
-	import * as Table from '$lib/components/ui/table';
-	import { fetchVersions, fetchVersionDetail, formatFileSize, detectPlatform, type FileInfo } from '$lib/api';
+	import { fetchVersions, fetchVersionDetail, type FileInfo } from '$lib/api';
 	import { resolve } from '$app/paths';
+	import FileList from '$lib/components/FileList.svelte';
 
 	let latestVersion = $state<string>('');
 	let files = $state<FileInfo[]>([]);
@@ -35,16 +35,16 @@
 <div class="min-h-screen bg-gradient-to-br from-background to-muted/20">
 	<header class="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
 		<div class="container mx-auto px-4 py-4 flex items-center justify-between">
-			<div class="flex items-center gap-3">
+			<a href={resolve('/')} class="flex items-center gap-3">
 				<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
 					<span class="text-primary-foreground font-bold text-sm">U</span>
 				</div>
 				<h1 class="text-xl font-semibold">UIAuto.dev</h1>
-			</div>
+			</a>
 			<nav class="flex items-center gap-4">
 				<a href={resolve('/')} class="text-sm font-medium text-foreground">Download</a>
 				<a href={resolve('/history')} class="text-sm text-muted-foreground hover:text-foreground transition-colors">History</a>
-				<a href="https://uiauto.dev" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
+				<a href="https://desktop.uiauto.dev" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
 			</nav>
 		</div>
 	</header>
@@ -83,46 +83,8 @@
 				</Card>
 			{:else}
 				<!-- Downloads Section -->
-				<section class="space-y-4">
-					<Card>
-						<CardHeader>
-							<CardTitle>Downloads</CardTitle>
-							<CardDescription>Select your platform to download</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<Table.Root>
-								<Table.Header>
-									<Table.Row>
-										<Table.Head>Platform</Table.Head>
-										<Table.Head>File</Table.Head>
-										<Table.Head class="text-right">Size</Table.Head>
-										<Table.Head class="text-right">Download</Table.Head>
-									</Table.Row>
-								</Table.Header>
-								<Table.Body>
-									{#each files as file (file.name)}
-										{@const platform = detectPlatform(file.name)}
-										<Table.Row>
-											<Table.Cell>
-												<Badge variant="secondary">{platform.platform}</Badge>
-											</Table.Cell>
-											<Table.Cell class="font-mono text-sm">{file.name}</Table.Cell>
-											<Table.Cell class="text-right text-muted-foreground">{formatFileSize(file.size)}</Table.Cell>
-											<Table.Cell class="text-right">
-												<a
-													href={file.download_url}
-													download
-													class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs h-8 px-3"
-												>
-													Download
-												</a>
-											</Table.Cell>
-										</Table.Row>
-									{/each}
-								</Table.Body>
-							</Table.Root>
-						</CardContent>
-					</Card>
+				<section class="space-y-6">
+					<FileList {files} />
 				</section>
 
 				<!-- Links Section -->

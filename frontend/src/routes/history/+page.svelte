@@ -44,16 +44,16 @@
 <div class="min-h-screen bg-gradient-to-br from-background to-muted/20">
 	<header class="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
 		<div class="container mx-auto px-4 py-4 flex items-center justify-between">
-			<div class="flex items-center gap-3">
+			<a href={resolve('/')} class="flex items-center gap-3">
 				<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
 					<span class="text-primary-foreground font-bold text-sm">U</span>
 				</div>
 				<h1 class="text-xl font-semibold">UIAuto.dev</h1>
-			</div>
+			</a>
 			<nav class="flex items-center gap-4">
 				<a href={resolve('/')} class="text-sm text-muted-foreground hover:text-foreground transition-colors">Download</a>
 				<a href={resolve('/history')} class="text-sm font-medium text-foreground">History</a>
-				<a href="https://uiauto.dev" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
+				<a href="https://desktop.uiauto.dev" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
 			</nav>
 		</div>
 	</header>
