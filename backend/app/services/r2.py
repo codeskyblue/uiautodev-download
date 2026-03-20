@@ -1,5 +1,6 @@
 """R2 storage service for managing version files."""
 
+import re
 from typing import Optional
 
 import asyncio
@@ -50,7 +51,7 @@ class R2Service:
             for prefix in result.search("CommonPrefixes"):
                 if prefix:
                     version = prefix.get("Prefix", "").rstrip("/")
-                    if version:
+                    if version and re.match(r"^\d+\.\d+\.\d+$", version):
                         versions.append(version)
 
             return sorted(versions, reverse=True)
